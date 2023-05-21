@@ -5,6 +5,7 @@ import { Button, Input, Select, Text, Box, FormLabel, Stack, FormControl, Spinne
 import axios from "axios"
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import "./AddBooks.css"
 
 // "id": 2,
 // "title": "To Kill a Mockingbird",
@@ -26,11 +27,7 @@ const initialState = {
 
 const AddBooks = () => {
 
-  const style = {
-    width: "60%",
-    margin: "auto",
-    padding: "5%",
-  };
+ 
   const toast = useToast()
   const navigate = useNavigate();
 
@@ -84,7 +81,7 @@ const AddBooks = () => {
       <Box mt='40px' >
 
 
-        <form style={style} boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px">
+        <form className='formData' boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px">
 
           <Stack padding={"30px"} spacing={4} boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px" borderRadius={"20px"}>
             {/* <FormLabel>Title</FormLabel> */}

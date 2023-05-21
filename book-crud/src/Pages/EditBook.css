@@ -1,0 +1,33 @@
+.formData{
+   
+    width:60%;
+   
+    margin: auto;
+    padding: 5%;
+}
+
+@media screen and (min-width: 769px) {
+    /* STYLES HERE */
+}
+
+@media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
+    /* STYLES HERE */
+    .formData{
+       
+        width:80%;
+       
+        margin: auto;
+        padding: 5%;
+    }
+}
+
+@media only screen and (max-device-width: 480px) {
+    /* STYLES HERE */
+    .formData{
+       
+        width:100%;
+       
+        margin: auto;
+        padding: 5%;
+    }
+}
