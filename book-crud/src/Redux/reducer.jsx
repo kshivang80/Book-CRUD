@@ -4,6 +4,7 @@ import * as types from "./actionTypes"
 
 const initalState = {
     books: [],
+    singlebook:{},
     isLoading: false,
     isError: false,
 }
@@ -14,7 +15,8 @@ export const reducer = (state = initalState, action) => {
     const { type, payload } = action;
 
     switch (type) {
-
+  
+        // For get Request Code
         case types.GET_BOOKS_REQUEST:
             return { ...state, isLoading: true }
 
@@ -24,7 +26,7 @@ export const reducer = (state = initalState, action) => {
         case types.GET_BOOKS_ERROR:
             return { ...state, isLoading: false, isError: true }
 
-
+        // for Post code
         case types.POST_BOOKS_REQUEST:
             return { ...state, isLoading: true }
 
@@ -33,6 +35,16 @@ export const reducer = (state = initalState, action) => {
 
         case types.POST_BOOKS_ERROR:
             return { ...state, isLoading: false, isError: true }
+
+        // For Update Book Request
+          case types.EDIT_BOOKS_REQUEST:
+              return {...state,isLoading:false}
+
+
+        // For Single Book REquest
+         case types.GET_SINGLE_BOOKS:
+            return {...state,singlebook:payload,isLoading:false}
+        
 
 
         default:

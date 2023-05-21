@@ -1,9 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { postBooks, postBooksError, postBooksRequest, postBooksSucess } from '../Redux/action'
-import { Button, Input, Select, Text, Box, FormLabel, Stack, FormControl } from "@chakra-ui/react"
+import { getBooks, postBooks, postBooksError, postBooksRequest, postBooksSucess } from '../Redux/action'
+import { Button, Input, Select, Text, Box, FormLabel, Stack, FormControl, Spinner, useToast } from "@chakra-ui/react"
 import axios from "axios"
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // "id": 2,
 // "title": "To Kill a Mockingbird",
@@ -26,28 +27,47 @@ const initialState = {
 const AddBooks = () => {
 
   const style = {
-    width: "50%",
+    width: "60%",
     margin: "auto",
     padding: "5%",
   };
-
+  const toast = useToast()
+  const navigate = useNavigate();
 
   const isLoading = useSelector((store) => store.isLoading)
   const dispatch = useDispatch()
 
-  const [text, SetText] = useState(initialState)
+  const [text, setText] = useState(initialState)
+
+  const { title, publish, year, author, image, ISBN } = text
 
   const handelChange = (e) => {
     const { name, value } = e.target;
 
-    SetText({ ...text, [name]: value });
+    setText({ ...text, [name]: value });
   };
 
   const handelSubmit = () => {
-    SetText({ ...text, id: new Date().getTime() });
 
+    if (!title || !author || !image || !year || !publish || !ISBN) {
+      alert("Please Fill All Input filled")
+    } else {
+      setText({ ...text, id: new Date().getTime() });
+      dispatch(postBooks(text));
+      toast({
+        title: 'Book Details',
+        description: "We've created Book Data is Created",
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: "top"
+      })
+      navigate("/")
 
-    dispatch(postBooks(text));
+      dispatch(getBooks())
+
+    }
+
   };
 
 
@@ -62,78 +82,102 @@ const AddBooks = () => {
 
 
       <Box mt='40px' >
-        {/* <Text fontSize={"3xl"} as="b">
-          {" "}
-          Post here{" "}
-        </Text> */}
+
 
         <form style={style} boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px">
 
           <Stack padding={"30px"} spacing={4} boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px" borderRadius={"20px"}>
             {/* <FormLabel>Title</FormLabel> */}
-            <Text fontSize={"3xl"} as="b">
+            <Text fontSize={"3xl"} ml="10px">
               {" "}
-              Create-Books{" "}
+              Add-Books{" "}
             </Text>
-            <FormControl isRequired>
+            <Box >
+              {/* <label style={{fontSize:"24px",fontFamily:"sans-serif",fontWeight:"bold"}}> Title</label> */}
+              <FormLabel ml="10px" fontSize={"19px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue' > Title</FormLabel>
               <Input
+
                 size='lg'
                 name="title"
                 value={text.title}
                 onChange={handelChange}
                 placeholder="Enter Books Title"
                 required
-                
+
               />
 
-            </FormControl>
-
-            {/* <FormLabel>Author</FormLabel> */}
-            <Input
-              size='lg'
-              placeholder="Enter Books author"
-              name="author"
-              value={text.author}
-              onChange={handelChange}
-              isRequired
-            />
-            <Input
-              size='lg'
-              placeholder="Enter Books  year"
-              name="year"
-              value={text.year}
-              onChange={handelChange}
-              isRequired
-            />
-
-            <Input
-              size='lg'
-              placeholder="Enter Books  publish"
-              name="publish"
-              value={text.publish}
-              onChange={handelChange}
-              isRequired
-            />
-
-            <Input
-              size='lg'
-              placeholder=" Enter Books  ISBN"
-              name="ISBN"
-              value={text.ISBN}
-              onChange={handelChange}
-              isRequired
-            />
+            </Box>
 
 
-            <Input
 
-              size='lg'
-              placeholder="Enter Books Image"
-              name="image"
-              value={text.image}
-              onChange={handelChange}
-              isRequired
-            />
+            <Box>
+              <FormLabel ml="10px" fontSize={"18px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue' >Author</FormLabel>
+              <Input
+                size='lg'
+                placeholder="Enter Books author"
+                name="author"
+                value={text.author}
+                onChange={handelChange}
+                isRequired
+              />
+
+            </Box>
+
+            <Box>
+              <FormLabel ml="10px" fontSize={"18px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue'  >Year</FormLabel>
+              <Input
+                size='lg'
+                placeholder="Enter Books  year"
+                name="year"
+                type='number'
+                value={text.year}
+                onChange={handelChange}
+                isRequired
+              />
+
+            </Box>
+
+            <Box>
+              <FormLabel ml="10px" fontSize={"18px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue' >Publish</FormLabel>
+
+              <Input
+                size='lg'
+                placeholder="Enter Books  publish"
+                name="publish"
+                value={text.publish}
+                onChange={handelChange}
+                isRequired
+              />
+
+            </Box>
+
+
+            <Box>
+              <FormLabel ml="10px" fontSize={"18px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue' >ISBN-Number</FormLabel>
+              <Input
+                size='lg'
+                placeholder=" Enter Books  ISBN"
+                name="ISBN"
+                type='number'
+                value={text.ISBN}
+                onChange={handelChange}
+                isRequired
+              />
+
+            </Box>
+
+            <Box>
+              <FormLabel ml="10px" fontSize={"18px"} fontFamily={"sans-serif"} fontWeight={"bold"} color='blue' >Image-Url</FormLabel>
+              <Input
+
+                size='lg'
+                placeholder="Enter Books Image"
+                name="image"
+                value={text.image}
+                onChange={handelChange}
+                isRequired
+              />
+            </Box>
 
 
             <Button

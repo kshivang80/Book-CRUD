@@ -58,7 +58,12 @@ const postBooksError=()=>{
 
 /////////////////   patch request /////////////
 
-const editBooksRequest=()=>{
+const getSingleBooksRequest = (user) => ({
+    type: types.GET_SINGLE_BOOKS,
+    payload: user,
+  });
+
+const updateBooksRequest=()=>{
 
     return {
         type:types.EDIT_BOOKS_REQUEST
@@ -66,23 +71,9 @@ const editBooksRequest=()=>{
 
 }
 
-const editBooksSucess=(payload)=>{
-
-    return {
-        type:types.EDIT_BOOKS_SUCCESS,
-        payload
-    }
-
-}
 
 
-const editBooksError=()=>{
 
-    return {
-        type:types.EDIT_BOOKS_ERROR
-    }
-
-}
 
 
 //////////////// delete Request  //////////////////
@@ -118,15 +109,15 @@ const deleteBooksError=()=>{
 
 
 const getBooks=()=>(dispatch)=>{
-   dispatch(getBooksRequest)
+   dispatch(getBooksRequest())
 
-   return axios.get("http://localhost:8080/books")
+   return axios.get("https://book-api-epaa.onrender.com/books")
      .then((r)=>{
         dispatch(getBooksSucess(r.data))
         console.log(r.data)
      })
      .catch((err)=>{
-        dispatch(getBooksError)
+        dispatch(getBooksError())
         console.log(err)
      })
 
@@ -134,23 +125,73 @@ const getBooks=()=>(dispatch)=>{
 }
 
 
+//Post Request
+
 const postBooks=(payload)=>(dispatch)=>{
-    dispatch(postBooksRequest)
+    dispatch(postBooksRequest())
  
-    return axios.post("http://localhost:8080/books",payload)
+    return axios.post("https://book-api-epaa.onrender.com/books",payload)
       .then((r)=>{
          dispatch(postBooksSucess(r.data))
          console.log(r.data)
       })
       .catch((err)=>{
-         dispatch(postBooksError)
+         dispatch(postBooksError())
          console.log(err)
       })
  
  
  }
 
+ // get single books 
+
+  const getSingleBooks = (id) =>  (dispatch) =>{
+      
+    axios
+        .get(`https://book-api-epaa.onrender.com/books/${id}`)
+        .then((res) => {
+          console.log(res.data);
+          dispatch(getSingleBooksRequest(res.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  
+
+ //update request
+
+ const updateBooks=(books,id)=>(dispatch)=>{
+        
+    axios.patch(`https://book-api-epaa.onrender.com/books/${id}`,books)
+    .then((res)=>{
+        console.log(res.data);
+        dispatch(updateBooksRequest())
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+ }
 
 
 
-export {getBooks ,postBooks ,postBooksError,postBooksRequest,postBooksSucess}
+
+
+ /// deltete Request
+
+ const deleteProducts = (id) => (dispatch) => {
+    dispatch(deleteBooksRequest());
+    return axios
+    .delete(`https://book-api-epaa.onrender.com/books/${id}`)
+    .then((r)=>{
+      dispatch(deleteBooksSucess(r))
+    })
+    .catch((e)=>{
+      dispatch(deleteBooksError(e))
+    })
+  
+  }
+
+
+
+export {getBooks ,postBooks ,updateBooks,deleteProducts,getSingleBooks,postBooksError,postBooksRequest,postBooksSucess}
