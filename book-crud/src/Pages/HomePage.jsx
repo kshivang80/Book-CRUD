@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 //import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteProducts, getBooks } from "../Redux/action"
-import { Box, Image, SimpleGrid, Text } from '@chakra-ui/react'
+import { Box, Image, SimpleGrid, Text, useToast } from '@chakra-ui/react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 
 const HomePage = () => {
   //const [data,setData] =useState([])
+  const toast = useToast()
   const dispatch = useDispatch()
   const books = useSelector((store) => store.books)
   console.log(books)
@@ -21,7 +22,18 @@ const HomePage = () => {
 
 
   const deleteHandler = (id) => {
-    dispatch(deleteProducts(id)).then(() => dispatch(getBooks()));
+    dispatch(deleteProducts(id))
+    .then(() =>{
+      dispatch(getBooks())
+      toast({
+        title: 'Deleted Succesfully ',
+        description: "Succesfully Book Deleted",
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top"
+    })
+    });
 
 }
 
